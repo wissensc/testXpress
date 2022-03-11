@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="res_partner_view_form_inherit_ml" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[last()]" position="after">
+                <page string="Mercado Libre" groups="base.group_system">
+                    <group>
+                        <group>
+                            <field name="id_buyer"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <!--Tree-->
+    <record id="res_partner_view_tree_inherit_ml" model="ir.ui.view">
+        <field name="name">res.partner.tree</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position="after">
+                <field name="id_buyer" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+    <!--Search-->
+    <record id="res_partner_view_search_inherit_ml" model="ir.ui.view">
+        <field name="name">res.partner.search</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="id_buyer" filter_domain="[('id_buyer', 'ilike', self)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

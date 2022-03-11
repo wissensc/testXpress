@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="form_invoice" name="Datos de facturación">
+        <t t-call="website.layout">
+            <div class="container mt-4 mb-5">
+                <div class="row">
+                    <div class="col-lg-7 col-xl-6 mr-lg-auto">
+                        <div class="oe_structure">
+                            <section class="s_text_block" data-snippet="s_text_block">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <form method="post">
+                                                <font style="font-size: 36px;" class="d-block text-black mb-4">
+                                                    <div style="text-align: center;">
+                                                        <b>
+                                                            <u>Invoice Data</u>
+                                                        </b>
+                                                    </div>
+                                                </font>
+                                                <font style="font-size: 28px;" class="text-black mb-3">
+                                                    <b>Invoice</b>
+                                                </font>
+                                                <div class="form-group">
+                                                    <label>Payment method</label>
+                                                    <select class="form-control" name="invoice_method"
+                                                            disabled="disabled">
+                                                        <t t-foreach="method" t-as="p">
+                                                            <option t-att-value="p.code"
+                                                                    t-att-selected="'selected' if p.code=='31' else None">
+                                                                <t t-esc="p.name"/>
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Usage</label>
+                                                    <select class="form-control" name="invoice_usage">
+                                                        <t t-foreach="usage" t-as="u">
+                                                            <option t-att-value="u[0]">
+                                                                <t t-esc="u[1]"/>
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                                <font style="font-size: 28px;" class="text-black mt-4">
+                                                    <b>Buyer</b>
+                                                </font>
+                                                <input type="hidden" name="csrf_token"
+                                                       t-att-value="request.csrf_token()"/>
+                                                <div class="form-group">
+                                                    <label>Name</label>
+                                                    <t t-if="buyer and buyer.name">
+                                                        <input type="text" name="buyer_name" class="form-control"
+                                                               t-att-value="buyer.name" required="1"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <input type="text" name="buyer_name" class="form-control"
+                                                               required="1"/>
+                                                    </t>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>RFC</label>
+                                                    <t t-if="buyer and buyer.vat">
+                                                        <input type="text" name="buyer_rfc" class="form-control"
+                                                               t-att-value="buyer.vat" required="1"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <input type="text" name="buyer_rfc" class="form-control"
+                                                               required="1"/>
+                                                    </t>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Address</label>
+                                                    <t t-if="buyer and buyer.street_name">
+                                                        <input type="text" name="buyer_address" class="form-control"
+                                                               t-att-value="buyer.street_name" required="1"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <input type="text" name="buyer_address" class="form-control"
+                                                               required="1"/>
+                                                    </t>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Zip</label>
+                                                    <t t-if="buyer and buyer.zip">
+                                                        <input type="text" name="buyer_zip" class="form-control"
+                                                               t-att-value="buyer.zip" required="1"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <input type="text" name="buyer_zip" class="form-control"
+                                                               required="1"/>
+                                                    </t>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email</label>
+                                                    <t t-if="buyer and buyer.email">
+                                                        <input type="text" name="buyer_email" class="form-control"
+                                                               t-att-value="buyer.email" required="1"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <input type="text" name="buyer_email" class="form-control"
+                                                               required="1"/>
+                                                    </t>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Phone</label>
+                                                    <t t-if="buyer and buyer.phone">
+                                                        <input type="text" name="buyer_phone" class="form-control"
+                                                               t-att-value="buyer.phone"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <input type="text" name="buyer_phone" class="form-control"/>
+                                                    </t>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Send</button>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mt-4 mt-lg-0">
+                        <h3>Order:
+                            <span t-field="sale.name"/>
+                        </h3>
+                        <t t-if="sale.date_order">
+                            <div t-field="sale.date_order" class="text-muted"/>
+                        </t>
+                        <table class="table mt-5">
+                            <tr>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Price unit</th>
+                                <th>Tax</th>
+                                <th>subtotal</th>
+                            </tr>
+                            <tr t-foreach="sale.order_line" t-as="line">
+                                <td t-esc="line.name"/>
+                                <td>
+                                    <span t-field="line.qty"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.price_unit"
+                                          t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                </td>
+                                <td>
+                                    <t t-foreach="line.tax_id" t-as="tax">
+                                        <span t-field="tax.name" class="mb-2"/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <span t-field="line.price_subtotal"
+                                          t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                                </td>
+                            </tr>
+                        </table>
+                        <p style="text-align: right; ">
+                            <b class="o_default_snippet_text">Total:
+                                <span t-field="sale.amount_total"
+                                      t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
+                            </b>
+                        </p>
+
+                        <h6>Order<br/>Mercado Libre:
+                            <span t-field="sale.id_order"/>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="success" name="Descargar">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="s_text_block pt40 pb40 o_colored_level " data-snippet="s_text_block">
+                    <div class="container s_allow_columns">
+                        <div class="row justify-content-center">
+                            <div class="col-l1 mt-4">
+                                <t t-if="submitted">
+                                    <span class="d-block fa fa-4x fa-thumbs-up mx-auto rounded-circle bg-primary"/>
+                                    <div class="pb16 pt16 s_hr" data-snippet="s_hr" data-name="Separator">
+                                        <h1 class="text-center">Thank you!</h1>
+                                        <hr class="mx-auto border-top w-150 border-dark text-center"/>
+                                    </div>
+                                    <br/>
+                                    <h5 class="text-center">
+                                        <span class="fa fa-check-circle"></span>
+                                        <span>Your message was sent
+                                            <b>successfully</b>
+                                        </span>
+                                    </h5>
+                                </t>
+                                <t t-else="">
+                                    <span class="d-block fa fa-4x fa-file mx-auto rounded-circle bg-primary"/>
+                                    <div class="pb16 pt16 s_hr" data-snippet="s_hr" data-name="Separator">
+                                        <h1 class="text-center">Invoice exist!</h1>
+                                        <hr class="mx-auto border-top w-150 border-dark text-center"/>
+                                    </div>
+                                    <br/>
+                                    <h5 class="text-center">
+                                        <span class="fa fa-check-circle"></span>
+                                        <span>
+                                            <b>Download</b>
+                                        </span>
+                                    </h5>
+                                </t>
+                                <div class="text-center">
+                                    <a t-att-href="url_pdf">
+                                        <button class="btn btn-primary">
+                                            <i class="fa fa-download"/>
+                                            PDF
+                                        </button>
+                                    </a>
+                                    <a t-att-href="url_xml">
+                                        <button class="btn btn-primary">
+                                            <i class="fa fa-download"/>
+                                            XML
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>

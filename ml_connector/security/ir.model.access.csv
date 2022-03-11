@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ml_notifications,access_ml_notifications,model_ml_notifications,base.group_system,1,1,1,1
+access_ml_settings,access_ml_settings,model_ml_settings,base.group_system,1,1,1,1
+access_ml_response_wizard,access_ml_response_wizard,model_ml_response_wizard,base.group_system,1,0,0,0

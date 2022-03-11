@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id='response_wizard_form' model='ir.ui.view'>
+            <field name="name">ml.response.wizard.form</field>
+            <field name="model">ml.response.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Wizard">
+                    <field name="response"/>
+                    <footer>
+                        <button string="Acept" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

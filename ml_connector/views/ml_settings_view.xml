@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="ml_settings_view_form" model="ir.ui.view">
+        <field name="name">ml.settings.form</field>
+        <field name="model">ml.settings</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0" string="Settings Mercado Libre">
+                <header>
+                    <field name="state" widget="statusbar" readonly="True"/>
+                    <button name="get_token" string="Get token" type="object" class="btn-primary"
+                            confirm="¿Want to get token?"/>
+                    <button name="get_refresh_token" string="Refresh token" type="object" class="btn-primary"
+                            confirm="¿Want to refresh token?"/>
+                    <button name="get_new_code" string="New code" type="object" class="btn-primary"
+                            confirm="Once the operation is confirmed, it cannot be reversed ¿Want to get new code?"/>
+                </header>
+                <sheet>
+                    <field name="state" invisible="1"/>
+<!--                    <widget name="web_ribbon" title="Connected" bg_color="bg-success"-->
+<!--                            attrs="{'invisible': [('state', '=', 'disconnected')]}"/>-->
+<!--                    <widget name="web_ribbon" title="Disconnected" bg_color="bg-danger"-->
+<!--                            attrs="{'invisible': [('state', '=', 'connected')]}"/>-->
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Example, TG-61f4b41ea13ef7451b2267ff-3044519940"/>
+                            <field name="clientId" placeholder="APP ID"/>
+                            <field name="client_secret" placeholder="SECRET KEY"/>
+                            <field name="redirect_uri" placeholder="URL"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Other Info">
+                            <group>
+                                <group>
+                                    <field name="update_datetime"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="access_token" readonly="True"/>
+                                <field name="refresh_token" readonly="True"/>
+                            </group>
+                        </page>
+                        <page string="Seller">
+                            <group>
+                                <group>
+                                    <field name="userId"/>
+                                    <field name="nickname"/>
+                                    <field name="username"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Response">
+                            <field name="ml_response"/>
+                        </page>
+                    </notebook>
+                    <div class="oe_clear"/>
+                </sheet>
+                <div class="o_attachment_preview"/>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="ml_settings_model_action" model="ir.actions.act_window">
+        <field name="name">Settings Mercado Libre</field>
+        <field name="res_model">ml.settings</field>
+        <field name="view_mode">form</field>
+        <field name="res_id" ref="ml_connector.ml_settings_1"/>
+    </record>
+
+    <menuitem name="Settings" id="setting"
+              parent="ml_connector.config" action="ml_settings_model_action"/>
+</odoo>

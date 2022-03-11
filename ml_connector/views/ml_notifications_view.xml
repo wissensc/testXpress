@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="ml_notifications_view_tree" model="ir.ui.view">
+        <field name="name">ml.notifications.tree</field>
+        <field name="model">ml.notifications</field>
+        <field name="arch" type="xml">
+            <tree create="false" delete="false" edit="false" export_xlsx="false" decoration-danger="state == 'failed'" decoration-bf="state == 'failed'">
+                <field name="write_date"/>
+                <field name="resource" decoration-bf="1"/>
+                <field name="topic" />
+                <field name="attempts"/>
+                <field name="sent"/>
+                <field name="received"/>
+                <button name="action_notification" string="Notification" type="object" class="btn-primary"/>
+                <button name="action_notification_details" type="object" class="btn-primary" icon="fa-info-circle"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'processing'" decoration-danger="state == 'failed'"
+                       decoration-success="state == 'success'"/>
+                <field name="note" decoration-bf="1" decoration-it="1"/>
+            </tree>
+        </field>
+    </record>
+    <record id="ml_notifications_model_action" model="ir.actions.act_window">
+        <field name="name">Notifications Mercado Libre</field>
+        <field name="res_model">ml.notifications</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem
+        id="menu"
+        name="Mercado Libre"
+        groups="base.group_system"
+        web_icon="ml_connector,static/description/icon.png"
+    />
+
+    <menuitem
+        id="notifications"
+        name="Notifications"
+        parent="ml_connector.menu"
+        action="ml_notifications_model_action"/>
+
+    <menuitem
+        id="config"
+        name="Config"
+        parent="menu"
+        groups="base.group_system"
+        sequence="99"/>
+
+</odoo>

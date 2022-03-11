@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ml_settings_1" model="ml.settings">
+            <field name="clientId">APP ID</field>
+            <field name="client_secret">SECRET KEY</field>
+            <field name="name">CODE</field>
+            <field name="redirect_uri" model="ir.config_parameter" eval="obj().env['ir.config_parameter'].sudo().get_param('web.base.url')"/>
+        </record>
+        <record id="ir_cron_refresh_token" model="ir.cron">
+            <field name="name">Run Refresh token</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">5</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now().strftime('%Y-%m-%d %H:%M:%S'))"/>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="ml_connector.model_ml_settings"/>
+            <field name="code">env.ref('ml_connector.ml_settings_1').get_refresh_token()</field>
+            <field name="state">code</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="sales_generic" model="res.partner">
+            <field name="name">Ventas mostrador</field>
+        </record>
+        <record id="tag_meli" model="crm.tag">
+            <field name="name">Mercado Libre</field>
+            <field name="color">3</field>
+        </record>
+        <record id="team_meli" model="crm.team">
+            <field name="name">Mercado Libre</field>
+        </record>
+    </data>
+</odoo>
