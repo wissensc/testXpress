@@ -90,6 +90,9 @@ class ML(object):
     def get_product(self, item_id):
         return self.__rest_client.get("/items/{}".format(item_id), {}, self.__access_token)
 
+    def get_shipments(self, shipments_id):
+        return self.__rest_client.get("/shipments/{}".format(shipments_id), {}, self.__access_token)
+
     def get_inventory_full(self, inventory_id):
         return self.__rest_client.get("/inventories/{}/stock/fulfillment".format(inventory_id), {}, self.__access_token)
 

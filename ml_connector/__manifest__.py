@@ -13,7 +13,7 @@
    'category': 'Uncategorized',
    'version': '14.0.1.0.4',
 
-   'depends': ['base', 'mail', 'base_ml', 'stock', 'account', 'website', 'l10n_mx_edi', 'l10n_mx_edi_extended'],
+   'depends': ['base', 'mail', 'base_ml', 'stock', 'account', 'l10n_mx_edi', 'l10n_mx_edi_extended'],
 
    'data': [
        'data/data.xml',

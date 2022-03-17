@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0-20220227\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-09 22:22+0000\n"
-"PO-Revision-Date: 2022-03-09 16:23-0600\n"
+"POT-Creation-Date: 2022-03-17 07:38+0000\n"
+"PO-Revision-Date: 2022-03-17 01:39-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: es\n"
+"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -47,10 +47,16 @@ msgid "Id Order"
 msgstr "Id orden"
 
 #. module: base_ml
+#: model:ir.model.fields,field_description:base_ml.field_product_product__id_inventory
+#: model:ir.model.fields,field_description:base_ml.field_product_template__id_inventory
+msgid "Id inventory"
+msgstr "Id inventario"
+
+#. module: base_ml
 #: model:ir.model.fields,field_description:base_ml.field_product_product__id_item
 #: model:ir.model.fields,field_description:base_ml.field_product_template__id_item
 msgid "Id item"
-msgstr "Id elemento"
+msgstr "Id publicación"
 
 #. module: base_ml
 #: model:ir.model.fields,field_description:base_ml.field_product_product__id_variation
@@ -62,7 +68,7 @@ msgstr "Id variación"
 #: model:ir.model.fields,field_description:base_ml.field_product_product__item_type
 #: model:ir.model.fields,field_description:base_ml.field_product_template__item_type
 msgid "Item type"
-msgstr "Tipo de Elemento"
+msgstr "Tipo de publicación"
 
 #. module: base_ml
 #: model:crm.tag,name:base_ml.tag_meli model:crm.team,name:base_ml.team_meli
@@ -80,6 +86,11 @@ msgid "Order ID must be unique"
 msgstr "El Id de la orden debe ser único"
 
 #. module: base_ml
+#: model:ir.model,name:base_ml.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: base_ml
 #: model:ir.model,name:base_ml.model_product_template
 msgid "Product Template"
 msgstr "Plantilla de producto"
@@ -90,11 +101,13 @@ msgid "Sales Order"
 msgstr "Orden de venta"
 
 #. module: base_ml
+#: model:ir.model.fields.selection,name:base_ml.selection__product_product__item_type__1
 #: model:ir.model.fields.selection,name:base_ml.selection__product_template__item_type__1
 msgid "Single"
-msgstr "Individual"
+msgstr "Sin variantes"
 
 #. module: base_ml
+#: model:ir.model.fields.selection,name:base_ml.selection__product_product__item_type__2
 #: model:ir.model.fields.selection,name:base_ml.selection__product_template__item_type__2
 msgid "With variants"
 msgstr "Con variantes"

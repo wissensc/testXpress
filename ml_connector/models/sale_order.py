@@ -36,18 +36,6 @@ class SaleOrder(models.Model):
             self.notification_id.note = "{} {}".format(note, data['response'].get('error', ''))
         return url
 
-
-    def _prepare_invoice_line_ws(self, order_line):
-        return {
-            'product_id': order_line.product_id.id,
-            'quantity': order_line.qty if self.amount_total >= 0 else -order_line.qty,
-            'discount': order_line.discount,
-            'price_unit': order_line.price_unit,
-            'name': order_line.product_id.display_name,
-            'tax_ids': [(6, 0, order_line.tax_ids_after_fiscal_position.ids)],
-            'product_uom_id': order_line.product_uom_id.id,
-        }
-
     def _prepare_invoice_ws(self, partner):
         """
         Prepare the dict of values to create the new invoice for a sales order. This method may be
@@ -151,26 +139,23 @@ class SaleOrder(models.Model):
         moves.action_process_edi_web_services()
         return moves
 
-    def _items(self, raw_data):
+    def _items(self, raw_data, route_id):
         lines = []
         line = {}
         for item in raw_data['order_items']:
             item_id = item['item']['id']
             variation_id = item['item'].get('variation_id')
             if variation_id:
-                tmpl = self.env['product.template'].search([('item_type', '=', '2'), ('id_item', '=', item_id), ('id_variation', '=', variation_id)])
+                product_id = self.env['product.product'].search([('item_type', '=', '2'), ('id_item', '=', item_id), ('id_variation', '=', variation_id)])
             else:
-                tmpl = self.env['product.template'].search([('item_type', '=', '1'), ('id_item', '=', item_id)])
-            if tmpl:
-                product = self.env['product.product'].search([('product_tmpl_id', '=', tmpl.id)])
-                line['product_id'] = product.id
-                line['name'] = product.name
+                product_id = self.env['product.product'].search([('item_type', '=', '1'), ('id_item', '=', item_id)])
+            if product_id:
+                line['product_id'] = product_id.id
+                line['name'] = product_id.name
                 line['product_uom_qty'] = item['quantity']
+                line['route_id'] = route_id.id
                 price_untax = float(item['unit_price']) / 1.16
                 line['price_unit'] = price_untax
-                # 'qty_delivered': 1,
-                # 'product_uom': self.company_data['product_order_cost'].uom_id.id,
-                # 'discount': 2.00,
                 line['tax_id'] = [(4, self.env.ref('l10n_mx.1_tax12').id)]
                 lines.append(line)
             else:
@@ -179,27 +164,33 @@ class SaleOrder(models.Model):
 
     @api.model
     def process_raw(self, data):
-        sales_generic = self.env.ref('base_ml.sales_generic')
-        order_lines = self._items(data)
         if not data.get('buyer')['id']:
             return {'error': _('No buyer found')}
+        sales_generic = self.env.ref('base_ml.sales_generic')
+        ml_conf = self.env.ref('ml_connector.ml_settings_1').sudo()
+        route_id = ml_conf.route_id
+        order_lines = self._items(data, route_id)
         if not order_lines:
             return {'error': _('No product found')}
+        if data['shipping'].get('id'):
+            product = ml_conf.product_id
+            ml = mercadolibre.ML(ml_conf.access_token)
 
+            raw_shipments = ml.get_shipments(data['shipping']['id'])
+            if raw_shipments['status'] == requests.codes.ok:
+                price = raw_shipments['response']['base_cost']
+                line = dict(product_id=product.id, price_unit=(float(price)/1.16), product_uom_qty=1)
+                order_lines.append(line)
+            else:
+                None
         return {
                 'id_order': data['id'],
                 'id_buyer': data['buyer']['id'],
                 'partner_id': sales_generic.id,
-                # 'partner_invoice_id': ml_buyer.id,
-                # 'partner_shipping_id': ml_buyer.id,
-                # 'analytic_account_id': self.analytic_account.id,
-                # 'pricelist_id': self.pricelist.id,
                 'order_line': [(0, 0, item) for item in order_lines],
-                # 'picking_policy': 'direct',
                 'team_id': self.env.ref('base_ml.team_meli').id,
+                'picking_policy': 'direct',
                 'tag_ids': [(4, self.env.ref('base_ml.tag_meli').id)],
-                # 'warehouse_id':
-                # 'company_id':
                 'payment_term_id': self.env.ref('account.account_payment_term_immediate').id
             }
 

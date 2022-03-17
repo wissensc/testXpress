@@ -140,7 +140,7 @@
                             <tr t-foreach="sale.order_line" t-as="line">
                                 <td t-esc="line.name"/>
                                 <td>
-                                    <span t-field="line.qty"/>
+                                    <span t-field="line.product_uom_qty"/>
                                 </td>
                                 <td>
                                     <span t-field="line.price_unit"
@@ -157,15 +157,25 @@
                                 </td>
                             </tr>
                         </table>
-                        <p style="text-align: right; ">
-                            <b class="o_default_snippet_text">Total:
-                                <span t-field="sale.amount_total"
-                                      t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/>
-                            </b>
-                        </p>
+                        <table class="table table-sm mb-5 table-borderless">
+                            <tr>
+                                <th>Untaxed amount:</th>
+                                <th><span t-field="sale.amount_untaxed"
+                                      t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/></th>
+                            </tr>
+                            <tr>
+                                <th>Taxes:</th>
+                                <th><span t-field="sale.amount_tax"
+                                      t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/></th>
+                            </tr>
+                            <tr class="border-top">
+                                <th>Total:</th>
+                                <th><span t-field="sale.amount_total"
+                                      t-esc-options='{"widget": "monetary", "display_currency": "currency"}'/></th>
+                            </tr>
+                        </table>
 
-                        <h6>Order<br/>Mercado Libre:
-                            <span t-field="sale.id_order"/>
+                        <h6 style="font-size:14px;">Order of Mercado Libre: <span t-field="sale.id_order"/>
                         </h6>
                     </div>
                 </div>

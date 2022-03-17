@@ -29,7 +29,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Other Info">
+                        <page string="Details">
                             <group>
                                 <group>
                                     <field name="update_datetime"/>
@@ -39,13 +39,20 @@
                                 <field name="access_token" readonly="True"/>
                                 <field name="refresh_token" readonly="True"/>
                             </group>
-                        </page>
-                        <page string="Seller">
                             <group>
                                 <group>
                                     <field name="userId"/>
                                     <field name="nickname"/>
                                     <field name="username"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Sale config">
+                            <group>
+                                <group>
+                                    <field name="product_id" required="True"/>
+                                    <field name="location_id" required="True"/>
+                                    <field name="route_id" required="True"/>
                                 </group>
                             </group>
                         </page>

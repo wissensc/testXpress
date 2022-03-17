@@ -4,6 +4,7 @@ from odoo import fields, models, api, _
 from odoo.addons.ml_connector.mercadolibre import mercadolibre
 
 import requests
+import json
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -42,7 +43,7 @@ class MlNotifications(models.Model):
                 data = self.env['sale.order'].process_raw(data_raw['response'])
                 if data_raw['response']['status'] == 'paid' and not data.get('error', False):
                     data['notification_id'] = notification.id
-                    sale = self.env['sale.order'].create(data)
+                    sale = self.env['sale.order'].with_context(default_user_id=None).create(data)
                     # self.env.cr.commit()
                     sale.action_confirm()
                     notification.write({'state': 'processing', 'note': _('Order: %s', sale.name)})
@@ -74,13 +75,14 @@ class MlNotifications(models.Model):
         ml = mercadolibre.ML(ml_conf.access_token)
 
         data = ml.get_notification_details(self.resource, self.topic)
+        html = "<html><body><pre><code>{}</code></pre><body></html>".format(json.dumps(data['response'], indent=4))
         return {
                 'name': _('Details'),
                 'type': 'ir.actions.act_window',
                 'res_model': 'ml.response.wizard',
                 'view_mode': 'form',
                 'context': {
-                    'default_response': data['response'],
+                    'default_response': html,
                 },
                 'target': 'new'
             }

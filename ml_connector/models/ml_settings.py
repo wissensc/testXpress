@@ -32,6 +32,10 @@ class MlSettings(models.Model):
     nickname = fields.Char("Nickname", readonly=True)
     username = fields.Char("Username", readonly=True)
 
+    product_id = fields.Many2one('product.product', string="Product shipping")
+    location_id = fields.Many2one('stock.location', string="Location")
+    route_id = fields.Many2one('stock.location.route', string="Route")
+
     def name_get(self):
         result = []
         for record in self:

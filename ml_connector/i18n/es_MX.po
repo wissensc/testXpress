@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0-20220227\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-10 07:44+0000\n"
-"PO-Revision-Date: 2022-03-10 01:46-0600\n"
+"POT-Creation-Date: 2022-03-17 07:41+0000\n"
+"PO-Revision-Date: 2022-03-17 01:49-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: code:addons/ml_connector/controllers/main.py:0
 #, python-format
 msgid "%s is not the reference of a report"
-msgstr "%s no es la referencia de un informe"
+msgstr "%s no es la referencia de un reporte"
 
 #. module: ml_connector
 #: code:addons/ml_connector/controllers/main.py:0
@@ -215,6 +215,7 @@ msgstr "Descripción"
 
 #. module: ml_connector
 #: code:addons/ml_connector/models/ml_notifications.py:0
+#: model_terms:ir.ui.view,arch_db:ml_connector.ml_settings_view_form
 #, python-format
 msgid "Details"
 msgstr "Detalles"
@@ -229,7 +230,7 @@ msgstr "Desconectado"
 #: model:ir.model.fields,field_description:ml_connector.field_ml_response_wizard__display_name
 #: model:ir.model.fields,field_description:ml_connector.field_ml_settings__display_name
 msgid "Display Name"
-msgstr "Nombre en pantalla"
+msgstr "Nombre mostrado"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
@@ -255,7 +256,7 @@ msgstr "Seguidores"
 #. module: ml_connector
 #: model:ir.model.fields,field_description:ml_connector.field_ml_settings__message_partner_ids
 msgid "Followers (Partners)"
-msgstr "Seguidores (partners)"
+msgstr "Seguidores (Partners)"
 
 #. module: ml_connector
 #: model:ir.model.fields,help:ml_connector.field_ml_settings__activity_type_icon
@@ -306,12 +307,12 @@ msgstr "Si se encuentra seleccionado, algunos mensajes tienen error de envío."
 #: code:addons/ml_connector/controllers/main.py:0
 #, python-format
 msgid "Invalid report type: %s"
-msgstr "Tipo de informe no válido: %s"
+msgstr "Tipo de reporte no válido: %s"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.success
 msgid "Invoice exist!"
-msgstr "¡La factura existe!"
+msgstr "¡Factura existente!"
 
 #. module: ml_connector
 #: model:ir.model.fields,field_description:ml_connector.field_ml_settings__message_is_follower
@@ -338,6 +339,11 @@ msgstr "Última actualización por"
 #: model:ir.model.fields,field_description:ml_connector.field_ml_settings__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
+
+#. module: ml_connector
+#: model:ir.model.fields,field_description:ml_connector.field_ml_settings__location_id
+msgid "Location"
+msgstr "Ubicación"
 
 #. module: ml_connector
 #: model:ir.model.fields,field_description:ml_connector.field_ml_settings__message_main_attachment_id
@@ -497,6 +503,11 @@ msgstr ""
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
+msgid "Order of Mercado Libre:"
+msgstr ""
+
+#. module: ml_connector
+#: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
 msgid "Order:"
 msgstr "Orden:"
 
@@ -505,16 +516,6 @@ msgstr "Orden:"
 #, python-format
 msgid "Order: %s"
 msgstr "Orden: %s"
-
-#. module: ml_connector
-#: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
-msgid "Order<br/>Mercado Libre:"
-msgstr "Orden <br/>Mercado Libre:"
-
-#. module: ml_connector
-#: model_terms:ir.ui.view,arch_db:ml_connector.ml_settings_view_form
-msgid "Other Info"
-msgstr "Otra información"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
@@ -556,6 +557,11 @@ msgstr "Procesando"
 #: model:ir.model,name:ml_connector.model_stock_move_line
 msgid "Product Moves (Stock Move Line)"
 msgstr "Movimientos de producto (Línea de movimiento de existencias)"
+
+#. module: ml_connector
+#: model:ir.model.fields,field_description:ml_connector.field_ml_settings__product_id
+msgid "Product shipping"
+msgstr "Producto envio"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
@@ -601,6 +607,11 @@ msgid "Responsible User"
 msgstr "Usuario responsable"
 
 #. module: ml_connector
+#: model:ir.model.fields,field_description:ml_connector.field_ml_settings__route_id
+msgid "Route"
+msgstr "Ruta"
+
+#. module: ml_connector
 #: model:ir.actions.server,name:ml_connector.ir_cron_refresh_token_ir_actions_server
 #: model:ir.cron,cron_name:ml_connector.ir_cron_refresh_token
 #: model:ir.cron,name:ml_connector.ir_cron_refresh_token
@@ -618,14 +629,14 @@ msgid "SMS Delivery error"
 msgstr "Error de entrega del SMS"
 
 #. module: ml_connector
+#: model_terms:ir.ui.view,arch_db:ml_connector.ml_settings_view_form
+msgid "Sale config"
+msgstr "Configuración venta"
+
+#. module: ml_connector
 #: model:ir.model,name:ml_connector.model_sale_order
 msgid "Sales Order"
 msgstr "Orden de venta"
-
-#. module: ml_connector
-#: model_terms:ir.ui.view,arch_db:ml_connector.ml_settings_view_form
-msgid "Seller"
-msgstr "Vendedor"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
@@ -688,6 +699,11 @@ msgid "Tax"
 msgstr "Impuesto"
 
 #. module: ml_connector
+#: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
+msgid "Taxes:"
+msgstr "Impuestos"
+
+#. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.success
 msgid "Thank you!"
 msgstr "¡Gracias!"
@@ -727,6 +743,11 @@ msgstr "Mensajes sin leer"
 #: model:ir.model.fields,field_description:ml_connector.field_ml_settings__message_unread_counter
 msgid "Unread Messages Counter"
 msgstr "Número de mensajes sin leer"
+
+#. module: ml_connector
+#: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
+msgid "Untaxed amount:"
+msgstr "Importe sin impuestos"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
