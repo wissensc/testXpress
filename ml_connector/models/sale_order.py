@@ -25,15 +25,19 @@ class SaleOrder(models.Model):
         _logger.info(url)
         ml_conf = self.env.ref('ml_connector.ml_settings_1')
         ml = mercadolibre.ML(ml_conf.access_token)
-        text = _("Si deseas facturar, entra en el siguiente <a href='%s'>enlace</a> para registrar tus datos", url)
-        data = ml.send_message(text, pack_id, self.notification_id.userId, self.id_buyer)
+        text = _("Si desea facturar, ingrese al siguiente <a href='%s'>enlace</a> para registrar sus datos, no olvide que tiene únicamente hasta el final de mes para realizar esta operación", url)
+        data = ml.tmp_send_message(pack_id, text)
         _logger.info(data)
         note = self.notification_id.note
         if data['status'] == requests.codes.ok or data['status'] == 201:
-            self.notification_id.note = "{} {}".format(note, _("link sent"))
+            self.notification_id.note = _("%s link sent", note)
+            self.message_post(body="<a href={}>{}</a>".format(url, url), author_id=False,
+                                subject=_("The link has been successfully sent to the buyer"), message_type='notification')
         else:
             self.notification_id.state = 'failed'
             self.notification_id.note = "{} {}".format(note, data['response'].get('error', ''))
+            self.message_post(body="<a href={}>{}</a>".format(url, url), author_id=False,
+                                subject=_("The link could not be sent to the buyer"), message_type='notification')
         return url
 
     def _prepare_invoice_ws(self, partner):
@@ -129,13 +133,15 @@ class SaleOrder(models.Model):
         # Manage the creation of invoices in sudo because a salesperson must be able to generate an invoice from a
         # sale order without "billing" access rights. However, he should not be able to create an invoice from scratch.
         moves = self.env['account.move'].with_context(default_move_type='out_invoice').create(invoice_vals_list)
-        # self.env.cr.commit()
+        self.env.cr.commit()
 
         for move in moves:
             move.message_post_with_view('mail.message_origin_link',
                                         values={'self': move, 'origin': move.line_ids.mapped('sale_line_ids.order_id')},
                                         subtype_id=self.env.ref('mail.mt_note').id)
         moves.action_post()
+        self.env.cr.commit()
+
         moves.action_process_edi_web_services()
         return moves
 
@@ -172,17 +178,15 @@ class SaleOrder(models.Model):
         order_lines = self._items(data, route_id)
         if not order_lines:
             return {'error': _('No product found')}
-        if data['shipping'].get('id'):
-            product = ml_conf.product_id
-            ml = mercadolibre.ML(ml_conf.access_token)
 
-            raw_shipments = ml.get_shipments(data['shipping']['id'])
-            if raw_shipments['status'] == requests.codes.ok:
-                price = raw_shipments['response']['base_cost']
-                line = dict(product_id=product.id, price_unit=(float(price)/1.16), product_uom_qty=1)
+        if data['payments']:
+            payments = list(filter(lambda x: x['status'] == 'approved', data['payments']))
+            shipping_cost = sum(float(payment['shipping_cost']) for payment in payments)
+            product = ml_conf.product_id
+            if shipping_cost > 0.0:
+                line = dict(product_id=product.id, price_unit=(shipping_cost/1.16), product_uom_qty=1)
                 order_lines.append(line)
-            else:
-                None
+
         return {
                 'id_order': data['id'],
                 'id_buyer': data['buyer']['id'],

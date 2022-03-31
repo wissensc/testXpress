@@ -127,7 +127,7 @@
                             <span t-field="sale.name"/>
                         </h3>
                         <t t-if="sale.date_order">
-                            <div t-field="sale.date_order" class="text-muted"/>
+                            <div t-field="sale.date_order" t-options='{"widget": "datetime"}' class="text-muted"/>
                         </t>
                         <table class="table mt-5">
                             <tr>
@@ -175,7 +175,7 @@
                             </tr>
                         </table>
 
-                        <h6 style="font-size:14px;">Order of Mercado Libre: <span t-field="sale.id_order"/>
+                        <h6 style="font-size:14px;">Orden de Mercado Libre: <span t-field="sale.id_order"/>
                         </h6>
                     </div>
                 </div>
@@ -201,6 +201,8 @@
                                         <span>Your message was sent
                                             <b>successfully</b>
                                         </span>
+                                        <br/>
+                                        <span>You can download the invoice in the following links</span>
                                     </h5>
                                 </t>
                                 <t t-else="">
@@ -238,4 +240,24 @@
             </div>
         </t>
     </template>
+    <template id="expired" name="Expirado">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="s_text_block pt40 pb40 o_colored_level " data-snippet="s_text_block">
+                    <div class="container s_allow_columns">
+                        <div class="row justify-content-center">
+                            <div class="col-l1 mt-4">
+                                <span class="d-block fa fa-4x fa-times mx-auto rounded-circle bg-primary"/>
+                                <div class="pb16 pt16 s_hr" data-snippet="s_hr" data-name="Separator">
+                                    <h1 class="text-center">The invoice cannot be generated because the term has been exceeded</h1>
+                                    <hr class="mx-auto border-top w-150 border-dark text-center"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
 </odoo>

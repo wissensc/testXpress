@@ -3,9 +3,10 @@ from odoo.http import request
 from odoo.http import Response
 from odoo.http import content_disposition
 from odoo.exceptions import UserError
-from odoo import SUPERUSER_ID, _, api
+from odoo import SUPERUSER_ID, _, api, fields
 from dateutil.parser import *
 from datetime import timezone
+from datetime import timedelta
 
 import odoo.http as http
 import hashlib
@@ -49,6 +50,7 @@ class Main(http.Controller):
                 else:
                     notification_id = notification.create(data)
                 notification.process_topic(data, notification_id)
+                request.env.cr.commit()
             else:
                 return Response("<html><body><h5>Error</h5></body></html>", content_type='text/html;charset=utf-8', status=403)
 
@@ -81,19 +83,20 @@ class Main(http.Controller):
 
     @http.route('/my_sale/<int:sale_id>', type='http', auth="public", website=True)
     def invoice(self, sale_id, **kwargs):
-        sale = request.env['sale.order'].with_user(SUPERUSER_ID).with_context({}).browse(sale_id).exists()
+        sale = request.env['sale.order'].with_user(SUPERUSER_ID).with_context().browse(sale_id).exists()
 
         if sale:
             id_buyer = sale.id_buyer
             kwargs['id_buyer'] = id_buyer or False
             buyer = request.env['res.partner'].with_user(SUPERUSER_ID).search([('id_buyer', '=', id_buyer)])
             token = self.mytoken(sale.id, 'sale')
-            if kwargs.get('token', False) == token:
-                if sale.invoice_ids and not kwargs.get('submitted', False):
+            if kwargs.get('token') == token:
+                if sale.invoice_ids and not kwargs.get('submitted'):
                     invoice = sale.invoice_ids[0]
                     return request.redirect('/my_invoice/{}?token={}'.format(invoice.id, self.mytoken(invoice.id, 'invoice')))
-
-                if kwargs.get('buyer_name', False) and not kwargs.get('submitted', False):
+                if kwargs.get('buyer_name') and not kwargs.get('submitted'):
+                    if self._expired(sale.date_order):
+                        return request.render('ml_connector.expired', {})
                     buyer = request.env['res.partner'].with_user(SUPERUSER_ID).process_buyer(buyer, kwargs)
                     # the field returns False because it is disabled, the value of the disabled field is 31
                     invoice = sale._create_invoices_ws(partner=buyer, method_code='31', usage=kwargs.get('invoice_usage', ''))
@@ -105,7 +108,8 @@ class Main(http.Controller):
                     else:
                         raise UserError(_("The invoice %s was not stamped", invoice.name))
                     return request.redirect('/my_invoice/{}?token={}&submitted=1'.format(invoice.id, self.mytoken(invoice.id, 'invoice')))
-
+                if self._expired(sale.date_order):
+                    return request.render('ml_connector.expired', {})
                 return request.render('ml_connector.form_invoice',
                                       {'sale': sale, 'buyer': buyer,
                                        'usage': request.env['res.partner'].with_user(SUPERUSER_ID).catalog_usage(),
@@ -162,6 +166,13 @@ class Main(http.Controller):
         string = "{}ws{}".format(model, tag)
         h.update(string.encode())
         return h.hexdigest()
+
+    def _expired(self, datetime):
+        current_date = fields.Datetime.context_timestamp(request, fields.Datetime.now() + timedelta(minutes=5))
+        sale_date = fields.Datetime.context_timestamp(request, datetime)
+        if current_date.year == sale_date.year and current_date.month == sale_date.month:
+            return False
+        return True
 
     @api.model
     def process_raw(self, data):

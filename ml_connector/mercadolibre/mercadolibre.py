@@ -123,6 +123,13 @@ class ML(object):
         }
         return self.__rest_client.post("/messages/packs/{}/sellers/{}?tag=post_sale".format(pack_id, seller_id), data, self.__rest_client.MIME_JSON, self.__access_token)
 
+    def tmp_send_message(self, pack_id, text):
+        data = {
+            "option_id": "SEND_INVOICE_LINK",
+            "text": text
+        }
+        return self.__rest_client.post("/messages/action_guide/packs/{}/option".format(pack_id), data, self.__rest_client.MIME_JSON, self.__access_token)
+
     class __RestClient(object):
         __API_BASE_URL = "https://api.mercadolibre.com"
         MIME_JSON = "application/json"

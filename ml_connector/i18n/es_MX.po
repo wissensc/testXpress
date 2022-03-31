@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0-20220227\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-17 07:41+0000\n"
-"PO-Revision-Date: 2022-03-17 01:49-0600\n"
+"POT-Creation-Date: 2022-03-26 05:45+0000\n"
+"PO-Revision-Date: 2022-03-25 23:45-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -33,13 +33,11 @@ msgstr "%s, Factura: %s"
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
 msgid ""
 "<b>\n"
-"                                                            <u>Invoice "
-"Data</u>\n"
+"                                                            <u>Invoice Data</u>\n"
 "                                                        </b>"
 msgstr ""
 "<b>\n"
-"                                                            <u>Datos de la "
-"factura</u>\n"
+"                                                            <u>Datos de la factura</u>\n"
 "                                                        </b>"
 
 #. module: ml_connector
@@ -97,12 +95,16 @@ msgid ""
 "<span class=\"fa fa-check-circle\"/>\n"
 "                                        <span>Your message was sent\n"
 "                                            <b>successfully</b>\n"
-"                                        </span>"
+"                                        </span>\n"
+"                                        <br/>\n"
+"                                        <span>You can download the invoice in the following links</span>"
 msgstr ""
-"<span j=\"0/\">\n"
-"                                        <span>Su mensaje fue enviado\n"
-"                                            <b>exitosamente</b>\n"
-"                                        </span></span>"
+"<span class=\"fa fa-check-circle\"/>\n"
+"                                        <span>Mensaje enviado\n"
+"                                            <b>satisfactoriamente</b>\n"
+"                                        </span>\n"
+"                                        <br/>\n"
+"                                        <span>Puede descargar los archivos en los siguientes enlaces:</span>"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.ml_settings_view_form
@@ -294,8 +296,7 @@ msgstr "Icono para indicar una actividad de excepción."
 #: model:ir.model.fields,help:ml_connector.field_ml_settings__message_needaction
 #: model:ir.model.fields,help:ml_connector.field_ml_settings__message_unread
 msgid "If checked, new messages require your attention."
-msgstr ""
-"Si se encuentra seleccionado, hay nuevos mensajes que requieren su atención."
+msgstr "Si se encuentra seleccionado, hay nuevos mensajes que requieren su atención."
 
 #. module: ml_connector
 #: model:ir.model.fields,help:ml_connector.field_ml_settings__message_has_error
@@ -353,7 +354,7 @@ msgstr "Archivos adjuntos principales"
 #. module: ml_connector
 #: model:ir.ui.menu,name:ml_connector.menu
 msgid "Mercado Libre"
-msgstr "Mercado Libre"
+msgstr ""
 
 #. module: ml_connector
 #: model:ir.model.fields,field_description:ml_connector.field_ml_notifications__ml_notification
@@ -494,17 +495,13 @@ msgstr "Número de mensajes sin leer"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.ml_settings_view_form
-msgid ""
-"Once the operation is confirmed, it cannot be reversed ¿Want to get new "
-"code?"
-msgstr ""
-"Una vez confirmada la operación, no se puede revertir ¿Quieres obtener un "
-"nuevo código?"
+msgid "Once the operation is confirmed, it cannot be reversed ¿Want to get new code?"
+msgstr "Una vez confirmada la operación, no se puede revertir ¿Quieres obtener un nuevo código?"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
-msgid "Order of Mercado Libre:"
-msgstr ""
+msgid "Orden de Mercado Libre:"
+msgstr "orden de Mercado Libre:"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
@@ -649,8 +646,7 @@ msgid "Sent"
 msgstr "Enviado"
 
 #. module: ml_connector
-#: code:addons/ml_connector/models/ml_settings.py:0
-#: model:ir.ui.menu,name:ml_connector.setting
+#: code:addons/ml_connector/models/ml_settings.py:0 model:ir.ui.menu,name:ml_connector.setting
 #, python-format
 msgid "Settings"
 msgstr "Ajustes"
@@ -670,9 +666,11 @@ msgstr "Ajustes de Mercado Libre"
 #: code:addons/ml_connector/models/sale_order.py:0
 #, python-format
 msgid ""
-"Si deseas facturar, entra en el siguiente <a href='%s'>enlace</a> para "
-"registrar tus datos"
+"Si desea facturar, ingrese al siguiente <a href='%s'>enlace</a> para registrar sus datos, no olvide que "
+"tiene únicamente hasta el final de mes para realizar esta operación"
 msgstr ""
+"Si desea facturar, ingrese al siguiente <a href='%s'>enlace</a> para registrar sus datos, no olvide que "
+"tiene únicamente hasta el final de mes para realizar esta operación"
 
 #. module: ml_connector
 #: model:ir.model.fields,field_description:ml_connector.field_ml_notifications__state
@@ -701,7 +699,7 @@ msgstr "Impuesto"
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
 msgid "Taxes:"
-msgstr "Impuestos"
+msgstr "Impuestos:"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.success
@@ -713,6 +711,23 @@ msgstr "¡Gracias!"
 #, python-format
 msgid "The invoice %s was not stamped"
 msgstr "La factura %s no fue timbrada"
+
+#. module: ml_connector
+#: model_terms:ir.ui.view,arch_db:ml_connector.expired
+msgid "The invoice cannot be generated because the term has been exceeded"
+msgstr "La factura no se puede generar porque se ha excedido el plazo"
+
+#. module: ml_connector
+#: code:addons/ml_connector/models/sale_order.py:0
+#, python-format
+msgid "The link could not be sent to the buyer"
+msgstr "No se pudo enviar el enlace al comprador"
+
+#. module: ml_connector
+#: code:addons/ml_connector/models/sale_order.py:0
+#, python-format
+msgid "The link has been successfully sent to the buyer"
+msgstr "El enlace se ha enviado correctamente al comprador"
 
 #. module: ml_connector
 #: model:ir.model.fields,field_description:ml_connector.field_ml_notifications__topic
@@ -747,7 +762,7 @@ msgstr "Número de mensajes sin leer"
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
 msgid "Untaxed amount:"
-msgstr "Importe sin impuestos"
+msgstr "Importe sin impuestos:"
 
 #. module: ml_connector
 #: model_terms:ir.ui.view,arch_db:ml_connector.form_invoice
