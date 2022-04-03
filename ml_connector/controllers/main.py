@@ -40,17 +40,17 @@ class Main(http.Controller):
             return Response(data_raw['error'], content_type='text/html;charset=utf-8', status=data_raw['status'])
         else:
             if ml_conf.clientId == str(data_raw.get('application_id', '')) and ml_conf.userId == str(data_raw.get('user_id', '')):
-
-                notification = request.env['ml.notifications'].with_user(SUPERUSER_ID)
                 data = self.process_raw(data_raw)
+                notification = request.env['ml.notifications'].with_user(SUPERUSER_ID)
                 notification_id = notification.search([('resource', '=', data_raw['resource'])])
 
                 if notification_id:
                     notification_id.write(data)
                 else:
                     notification_id = notification.create(data)
+                    request.env.cr.commit()
+
                 notification.process_topic(data, notification_id)
-                request.env.cr.commit()
             else:
                 return Response("<html><body><h5>Error</h5></body></html>", content_type='text/html;charset=utf-8', status=403)
 

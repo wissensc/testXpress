@@ -133,7 +133,6 @@ class SaleOrder(models.Model):
         # Manage the creation of invoices in sudo because a salesperson must be able to generate an invoice from a
         # sale order without "billing" access rights. However, he should not be able to create an invoice from scratch.
         moves = self.env['account.move'].with_context(default_move_type='out_invoice').create(invoice_vals_list)
-        self.env.cr.commit()
 
         for move in moves:
             move.message_post_with_view('mail.message_origin_link',
@@ -179,14 +178,18 @@ class SaleOrder(models.Model):
         if not order_lines:
             return {'error': _('No product found')}
 
-        if data['payments']:
-            payments = list(filter(lambda x: x['status'] == 'approved', data['payments']))
-            shipping_cost = sum(float(payment['shipping_cost']) for payment in payments)
+        if data['shipping'].get('id'):
             product = ml_conf.product_id
-            if shipping_cost > 0.0:
-                line = dict(product_id=product.id, price_unit=(shipping_cost/1.16), product_uom_qty=1)
-                order_lines.append(line)
+            ml = mercadolibre.ML(ml_conf.access_token)
 
+            raw_cost_shipments = ml.get_cost_shipments(data['shipping']['id'])
+            if raw_cost_shipments['status'] == requests.codes.ok:
+                price = raw_cost_shipments['response']['receiver']['cost']
+                if price > 0.0:
+                    line = dict(product_id=product.id, price_unit=(float(price) / 1.16), product_uom_qty=1)
+                    order_lines.append(line)
+            else:
+                return {'error': raw_cost_shipments['response']}
         return {
                 'id_order': data['id'],
                 'id_buyer': data['buyer']['id'],
