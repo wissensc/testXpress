@@ -36,15 +36,18 @@ class MlNotifications(models.Model):
             resource = vals['resource']
             order_id = resource.split('/')[2]
             sale = self.env['sale.order'].search([('id_order', '=', order_id)])
-            if sale:
-                return None
             data_raw = notification.function_notification_details(vals['resource'], vals['topic'])
             if data_raw:
+                if sale:
+                    sale.action_cancel()
+                    sale.state_order = data_raw['response']['status']
+                    return
                 data = self.env['sale.order'].process_raw(data_raw['response'])
                 if data_raw['response']['status'] == 'paid' and not data.get('error', False):
                     data['notification_id'] = notification.id
                     sale = self.env['sale.order'].with_context(default_user_id=None).create(data)
                     sale.action_confirm()
+                    sale.state_order = 'paid'
                     notification.write({'state': 'processing', 'note': _('Order: %s', sale.name)})
                     if data_raw['response'].get('pack_id'):
                         sale.invoice_link(data_raw['response']['pack_id'])

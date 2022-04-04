@@ -8,5 +8,6 @@ class SaleOrder(models.Model):
 
     id_order = fields.Char("Id Order", index=True, readonly=True, copy=False)
     id_buyer = fields.Char("Id Buyer", index=True, readonly=True, copy=False)
+    state_order = fields.Char("Status order", index=True, readonly=True, copy=False)
 
     _sql_constraints = [('id_order_unique', 'unique (id_order)', _('Order ID must be unique'))]

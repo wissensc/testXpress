@@ -44,12 +44,11 @@ class Main(http.Controller):
                 notification = request.env['ml.notifications'].with_user(SUPERUSER_ID)
                 notification_id = notification.search([('resource', '=', data_raw['resource'])])
 
-                if notification_id:
-                    notification_id.write(data)
-                else:
+                if not notification_id:
                     notification_id = notification.create(data)
                     request.env.cr.commit()
-
+                else:
+                    notification_id.write(data)
                 notification.process_topic(data, notification_id)
             else:
                 return Response("<html><body><h5>Error</h5></body></html>", content_type='text/html;charset=utf-8', status=403)

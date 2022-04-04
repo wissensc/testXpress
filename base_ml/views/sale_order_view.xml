@@ -11,6 +11,7 @@
                         <group>
                             <field name="id_order"/>
                             <field name="id_buyer"/>
+                            <field name="state_order"/>
                         </group>
                     </group>
                 </page>

@@ -42,6 +42,13 @@ msgid "Id Buyer"
 msgstr "Id comprador"
 
 #. module: base_ml
+#: model:ir.model.fields,field_description:base_ml.field_res_partner__state_order
+#: model:ir.model.fields,field_description:base_ml.field_res_users__state_order
+#: model:ir.model.fields,field_description:base_ml.field_sale_order__state_order
+msgid "Status order"
+msgstr "Estado de la orden"
+
+#. module: base_ml
 #: model:ir.model.fields,field_description:base_ml.field_sale_order__id_order
 msgid "Id Order"
 msgstr "Id orden"
