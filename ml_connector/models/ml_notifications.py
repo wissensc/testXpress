@@ -29,6 +29,7 @@ class MlNotifications(models.Model):
                               ("success", "Processed")],
                              string='State', index=True, default="received")
     note = fields.Char()
+    _sql_constraints = [('resource_unique', 'unique (resource)', _('Resource must be unique'))]
 
     @api.model
     def process_topic(self, vals, notification):

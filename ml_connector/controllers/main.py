@@ -46,7 +46,7 @@ class Main(http.Controller):
 
                 if not notification_id:
                     notification_id = notification.create(data)
-                    request.env.cr.commit()
+                    # request.env.cr.commit()
                 else:
                     notification_id.write(data)
                 notification.process_topic(data, notification_id)

@@ -361,6 +361,13 @@ msgstr ""
 msgid "Mercado Libre notification"
 msgstr "Notificación de Mercado Libre"
 
+#. module: base_ml
+#: code:addons/base_ml/models/ml_notifications.py:0
+#: model:ir.model.constraint,message:base_ml.constraint_ml_notifications_resource_unique
+#, python-format
+msgid "Resource must be unique"
+msgstr "El recurso debe ser único"
+
 #. module: ml_connector
 #: model:ir.model.fields,field_description:ml_connector.field_ml_settings__ml_response
 msgid "Mercado Libre response"
