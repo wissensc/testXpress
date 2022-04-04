@@ -100,6 +100,11 @@ class Main(http.Controller):
                     buyer = request.env['res.partner'].with_user(SUPERUSER_ID).process_buyer(buyer, kwargs)
                     # the field returns False because it is disabled, the value of the disabled field is 31
                     invoice = sale._create_invoices_ws(partner=buyer, method_code='31', usage=kwargs.get('invoice_usage', ''))
+                    invoice.action_post()
+                    request.env.cr.commit()
+                    invoice.action_process_edi_web_services()
+                    request.env.cr.commit()
+
                     if invoice.edi_state == 'sent':
                         notification = request.env['ml.notifications'].with_user(SUPERUSER_ID).browse(sale.notification_id.id).exists()
                         note = notification.note

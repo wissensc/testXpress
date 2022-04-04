@@ -44,7 +44,6 @@ class MlNotifications(models.Model):
                 if data_raw['response']['status'] == 'paid' and not data.get('error', False):
                     data['notification_id'] = notification.id
                     sale = self.env['sale.order'].with_context(default_user_id=None).create(data)
-                    # self.env.cr.commit()
                     sale.action_confirm()
                     notification.write({'state': 'processing', 'note': _('Order: %s', sale.name)})
                     if data_raw['response'].get('pack_id'):

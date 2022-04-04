@@ -140,7 +140,7 @@ class ML(object):
 
         def __init__(self, outer):
             self.__outer = outer
-            self.USER_AGENT = "MercadoLibre Python conector v" + self.__outer.version
+            self.USER_AGENT = "MercadoLibre Python connector v" + self.__outer.version
 
         def get(self, uri, data=None, access_token=None):
             api_result = requests.get("{}{}".format(self.__API_BASE_URL, uri), data=data, headers={'User-Agent': self.USER_AGENT, "Authorization": "Bearer %s" % access_token})

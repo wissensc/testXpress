@@ -30,12 +30,12 @@ class SaleOrder(models.Model):
         _logger.info(data)
         note = self.notification_id.note
         if data['status'] == requests.codes.ok or data['status'] == 201:
-            self.notification_id.note = _("%s link sent", note)
+            self.notification_id.note = "%s, link sent" % note
             self.message_post(body="<a href={}>{}</a>".format(url, url), author_id=False,
                                 subject=_("The link has been successfully sent to the buyer"), message_type='notification')
         else:
             self.notification_id.state = 'failed'
-            self.notification_id.note = "{} {}".format(note, data['response'].get('error', ''))
+            self.notification_id.note = "%s, %s" % (note, data['response'])
             self.message_post(body="<a href={}>{}</a>".format(url, url), author_id=False,
                                 subject=_("The link could not be sent to the buyer"), message_type='notification')
         return url
@@ -138,10 +138,6 @@ class SaleOrder(models.Model):
             move.message_post_with_view('mail.message_origin_link',
                                         values={'self': move, 'origin': move.line_ids.mapped('sale_line_ids.order_id')},
                                         subtype_id=self.env.ref('mail.mt_note').id)
-        moves.action_post()
-        self.env.cr.commit()
-
-        moves.action_process_edi_web_services()
         return moves
 
     def _items(self, raw_data, route_id):
